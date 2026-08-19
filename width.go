@@ -6,12 +6,10 @@ package runewidth
 
 //go:generate go run ./internal/gen -output tables.go
 
-const maxRune = 0x10FFFF
-
-type widthRange struct {
-	first rune
-	last  rune
-}
+const (
+	maxRune  = 0x10FFFF
+	pageSize = 1 << 8
+)
 
 // Width reports the terminal column width of r as 0, 1, or 2.
 //
@@ -21,33 +19,10 @@ type widthRange struct {
 //
 // Width performs no allocation.
 func Width(r rune) int {
-	if uint32(r) > maxRune || 0xD800 <= r && r <= 0xDFFF {
+	u := uint32(r)
+	if u > maxRune || 0xD800 <= u && u <= 0xDFFF {
 		return 0
 	}
-	if r < 0x300 {
-		if r < 0x20 || 0x7F <= r && r <= 0x9F || r == 0xAD {
-			return 0
-		}
-		return 1
-	}
-	if inTable(r, zeroWidth[:]) {
-		return 0
-	}
-	if inTable(r, doubleWidth[:]) {
-		return 2
-	}
-	return 1
-}
-
-func inTable(r rune, table []widthRange) bool {
-	lo, hi := 0, len(table)
-	for lo < hi {
-		m := int(uint(lo+hi) >> 1)
-		if table[m].last < r {
-			lo = m + 1
-		} else {
-			hi = m
-		}
-	}
-	return lo < len(table) && table[lo].first <= r
+	page := int(widthPage[u>>8])
+	return int(widthData[page*pageSize+int(u&0xFF)])
 }
