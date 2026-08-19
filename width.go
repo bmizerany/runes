@@ -3,6 +3,11 @@
 // Width is code-point based. It does not measure grapheme clusters, whose
 // display width can depend on surrounding runes, terminal policy, and fonts.
 //
+// This package is deliberately narrower than Yasuhiro Matsumoto's excellent
+// github.com/mattn/go-runewidth, which provides string width, wrapping,
+// truncation, padding, and configurable conditions. Its implementation and
+// Unicode tables were invaluable references in defining and auditing Width.
+//
 // Width uses a generated lookup table and performs no allocation. On an Apple
 // M4 Pro, the package benchmark processes one million mixed code points in
 // about 0.77 ms, about 39% less time than github.com/mattn/go-runewidth v0.0.28

@@ -42,6 +42,16 @@ The operation is deliberately code-point based. It does not measure grapheme
 clusters, whose display width can depend on neighboring runes, terminal
 policy, and fonts.
 
+## Credit
+
+Yasuhiro Matsumoto's
+[`go-runewidth`](https://github.com/mattn/go-runewidth) is an excellent,
+full-featured library for terminal-width work. It handles string width,
+wrapping, truncation, padding, and configurable conditions—far more than this
+package's one operation. Its implementation and Unicode tables were invaluable
+references while defining and auditing this package. If you need that broader
+API, use it. Thank you, mattn.
+
 ## Performance
 
 `Width` uses a generated lookup table and performs no allocation.
