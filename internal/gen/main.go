@@ -143,7 +143,7 @@ func readCategories(width []byte, data []byte) {
 
 func setCategory(width []byte, lo, hi int, category string) {
 	switch category {
-	case "Cc", "Cf", "Mn", "Me":
+	case "Cc", "Cf", "Mn", "Me", "Zl", "Zp":
 		for r := lo; r <= hi; r++ {
 			width[r] = 0
 		}

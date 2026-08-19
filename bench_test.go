@@ -1,6 +1,10 @@
 package runewidth
 
-import "testing"
+import (
+	"testing"
+
+	mattn "github.com/mattn/go-runewidth"
+)
 
 const benchmarkRunes = 250_000
 
@@ -8,6 +12,7 @@ var (
 	benchmarkASCII   = repeatRunes("The quick brown fox jumps over the lazy dog. ", benchmarkRunes)
 	benchmarkMixed   = repeatRunes("Go界e\u0301😀αЖ한", benchmarkRunes)
 	benchmarkMillion = repeatRunes("Go界e\u0301😀αЖ한", 1_000_000)
+	benchmarkMattn   = &mattn.Condition{StrictEmojiNeutral: true}
 )
 
 func repeatRunes(s string, n int) []rune {
@@ -17,6 +22,33 @@ func repeatRunes(s string, n int) []rune {
 		runes[i] = pattern[i%len(pattern)]
 	}
 	return runes
+}
+
+func BenchmarkWidthAgainstMattn(b *testing.B) {
+	benchmarkMattn.RuneWidth('界') // Build mattn's lazy table before timing.
+
+	b.Run("runewidth/Mixed1M", func(b *testing.B) {
+		b.ReportAllocs()
+		b.ReportMetric(float64(len(benchmarkMillion)), "runes/op")
+		for b.Loop() {
+			n := 0
+			for _, r := range benchmarkMillion {
+				n += Width(r)
+			}
+			widthSink = n
+		}
+	})
+	b.Run("mattn/Mixed1M", func(b *testing.B) {
+		b.ReportAllocs()
+		b.ReportMetric(float64(len(benchmarkMillion)), "runes/op")
+		for b.Loop() {
+			n := 0
+			for _, r := range benchmarkMillion {
+				n += benchmarkMattn.RuneWidth(r)
+			}
+			widthSink = n
+		}
+	})
 }
 
 func BenchmarkWidth(b *testing.B) {

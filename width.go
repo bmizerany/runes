@@ -14,9 +14,10 @@ const (
 
 // Width reports the terminal column width of r as 0, 1, or 2.
 //
-// Invalid rune values, controls, format characters, combining marks, and
-// Unicode noncharacters have width 0. East Asian Wide and Fullwidth runes have
-// width 2. All other runes have width 1.
+// Invalid rune values, controls, format characters, line and paragraph
+// separators, nonspacing and enclosing marks, and Unicode noncharacters have
+// width 0. East Asian Wide and Fullwidth runes have width 2. All other runes,
+// including spacing marks, have width 1.
 //
 // Width performs no allocation.
 func Width(r rune) int {
