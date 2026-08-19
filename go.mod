@@ -1,6 +1,6 @@
 module blake.io/runewidth
 
-go 1.27rc2
+go 1.24.13
 
 require github.com/mattn/go-runewidth v0.0.28
 
