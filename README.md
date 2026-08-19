@@ -42,6 +42,28 @@ The operation is deliberately code-point based. It does not measure grapheme
 clusters, whose display width can depend on neighboring runes, terminal
 policy, and fonts.
 
+## Performance
+
+`Width` uses a generated lookup table and performs no allocation.
+`BenchmarkWidthAgainstMattn` processes one million mixed code points. Ten
+300 ms samples on darwin/arm64, Apple M4 Pro, produced:
+
+| Implementation | Time/op | B/op | Allocs/op |
+| --- | ---: | ---: | ---: |
+| `blake.io/runewidth` | 768.5 µs | 0 | 0 |
+| `github.com/mattn/go-runewidth` v0.0.28 | 1260.4 µs | 0 | 0 |
+
+`blake.io/runewidth` used 39.03% less time in this benchmark. The mattn
+condition is non-East-Asian with `StrictEmojiNeutral` enabled. This compares
+lookup cost, not identical width policy; the packages intentionally differ on
+some code points. Results vary by system.
+
+Run the benchmark with:
+
+```sh
+go test -run '^$' -bench '^BenchmarkWidthAgainstMattn$' -benchmem -count=10 -benchtime=300ms
+```
+
 The generated table is built from pinned Unicode 17 data:
 
 ```sh
