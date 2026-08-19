@@ -1,6 +1,6 @@
-# runewidth
+# runes
 
-Package `runewidth` reports the terminal column width of a Unicode code
+Package `runes` reports the terminal column width of a Unicode code
 point. It has one operation:
 
 ```go
@@ -12,7 +12,7 @@ func Width(rune) int
 ## Install
 
 ```sh
-go get blake.io/runewidth
+go get blake.io/runes
 ```
 
 ## Use
@@ -23,13 +23,13 @@ package main
 import (
 	"fmt"
 
-	"blake.io/runewidth"
+	"blake.io/runes"
 )
 
 func main() {
-	fmt.Println(runewidth.Width('a'))      // 1
-	fmt.Println(runewidth.Width('\u0301')) // 0
-	fmt.Println(runewidth.Width('界'))      // 2
+	fmt.Println(runes.Width('a'))      // 1
+	fmt.Println(runes.Width('\u0301')) // 0
+	fmt.Println(runes.Width('界'))      // 2
 }
 ```
 
@@ -60,10 +60,10 @@ API, use it. Thank you, mattn.
 
 | Implementation | Time/op | B/op | Allocs/op |
 | --- | ---: | ---: | ---: |
-| `blake.io/runewidth` | 768.5 µs | 0 | 0 |
+| `blake.io/runes` | 768.5 µs | 0 | 0 |
 | `github.com/mattn/go-runewidth` v0.0.28 | 1260.4 µs | 0 | 0 |
 
-`blake.io/runewidth` used 39.03% less time in this benchmark. The mattn
+`blake.io/runes` used 39.03% less time in this benchmark. The mattn
 condition is non-East-Asian with `StrictEmojiNeutral` enabled. This compares
 lookup cost, not identical width policy; the packages intentionally differ on
 some code points. Results vary by system.

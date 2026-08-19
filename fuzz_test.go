@@ -1,4 +1,4 @@
-package runewidth
+package runes
 
 import (
 	"testing"

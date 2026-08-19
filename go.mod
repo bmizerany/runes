@@ -1,4 +1,4 @@
-module blake.io/runewidth
+module blake.io/runes
 
 go 1.24.13
 

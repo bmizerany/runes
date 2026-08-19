@@ -1,4 +1,4 @@
-// Command gen generates the Unicode width tables used by package runewidth.
+// Command gen generates the Unicode width tables used by package runes.
 package main
 
 import (
@@ -175,7 +175,7 @@ func generate(width []byte) []byte {
 	fmt.Fprintf(&out, "//\n// Unicode %s:\n", unicodeVersion)
 	fmt.Fprintf(&out, "// %s\n// SHA-256 %s\n", unicodeDataURL, unicodeDataSHA)
 	fmt.Fprintf(&out, "// %s\n// SHA-256 %s\n\n", eastAsianURL, eastAsianSHA)
-	fmt.Fprintln(&out, "package runewidth")
+	fmt.Fprintln(&out, "package runes")
 	writeBytes(&out, "widthPage", index, 16)
 	writeBytes(&out, "widthData", pages, 32)
 	return out.Bytes()

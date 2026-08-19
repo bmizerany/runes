@@ -1,4 +1,4 @@
-package runewidth
+package runes
 
 import (
 	"testing"
@@ -27,7 +27,7 @@ func repeatRunes(s string, n int) []rune {
 func BenchmarkWidthAgainstMattn(b *testing.B) {
 	benchmarkMattn.RuneWidth('界') // Build mattn's lazy table before timing.
 
-	b.Run("runewidth/Mixed1M", func(b *testing.B) {
+	b.Run("runes/Mixed1M", func(b *testing.B) {
 		b.ReportAllocs()
 		b.ReportMetric(float64(len(benchmarkMillion)), "runes/op")
 		for b.Loop() {
