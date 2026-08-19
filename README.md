@@ -1,0 +1,54 @@
+# runewidth
+
+Package `runewidth` reports the terminal column width of a Unicode code
+point. It has one operation:
+
+```go
+func Width(rune) int
+```
+
+`Width` returns 0, 1, or 2 and performs no allocation.
+
+## Install
+
+```sh
+go get blake.io/runewidth
+```
+
+## Use
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"blake.io/runewidth"
+)
+
+func main() {
+	fmt.Println(runewidth.Width('a'))      // 1
+	fmt.Println(runewidth.Width('\u0301')) // 0
+	fmt.Println(runewidth.Width('界'))      // 2
+}
+```
+
+Invalid runes, controls, format characters, line and paragraph separators,
+nonspacing and enclosing marks, and Unicode noncharacters have width 0.
+East Asian Wide and Fullwidth runes have width 2. Everything else,
+including spacing marks, has width 1.
+
+The operation is deliberately code-point based. It does not measure grapheme
+clusters, whose display width can depend on neighboring runes, terminal
+policy, and fonts.
+
+The generated table is built from pinned Unicode 17 data:
+
+```sh
+go generate ./...
+go test ./...
+```
+
+## License
+
+BSD 3-Clause, the same license used by Go. See `LICENSE`.
