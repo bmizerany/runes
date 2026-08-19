@@ -7,8 +7,9 @@ package runewidth
 //go:generate go run ./internal/gen -output tables.go
 
 const (
-	maxRune  = 0x10FFFF
-	pageSize = 1 << 8
+	maxRune        = 0x10FFFF
+	pageSize       = 1 << 8
+	packedPageSize = pageSize / 4
 )
 
 // Width reports the terminal column width of r as 0, 1, or 2.
@@ -24,5 +25,7 @@ func Width(r rune) int {
 		return 0
 	}
 	page := int(widthPage[u>>8])
-	return int(widthData[page*pageSize+int(u&0xFF)])
+	i := page*packedPageSize + int(u&0xFF)/4
+	shift := (u & 3) * 2
+	return int(widthData[i] >> shift & 3)
 }

@@ -5,8 +5,9 @@ import "testing"
 const benchmarkRunes = 250_000
 
 var (
-	benchmarkASCII = repeatRunes("The quick brown fox jumps over the lazy dog. ", benchmarkRunes)
-	benchmarkMixed = repeatRunes("Go界e\u0301😀αЖ한", benchmarkRunes)
+	benchmarkASCII   = repeatRunes("The quick brown fox jumps over the lazy dog. ", benchmarkRunes)
+	benchmarkMixed   = repeatRunes("Go界e\u0301😀αЖ한", benchmarkRunes)
+	benchmarkMillion = repeatRunes("Go界e\u0301😀αЖ한", 1_000_000)
 )
 
 func repeatRunes(s string, n int) []rune {
@@ -19,11 +20,17 @@ func repeatRunes(s string, n int) []rune {
 }
 
 func BenchmarkWidth(b *testing.B) {
-	for name, runes := range map[string][]rune{
-		"ASCII250K": benchmarkASCII,
-		"Mixed250K": benchmarkMixed,
-	} {
-		b.Run(name, func(b *testing.B) {
+	benchmarks := []struct {
+		name  string
+		runes []rune
+	}{
+		{"ASCII250K", benchmarkASCII},
+		{"Mixed250K", benchmarkMixed},
+		{"Mixed1M", benchmarkMillion},
+	}
+	for _, benchmark := range benchmarks {
+		b.Run(benchmark.name, func(b *testing.B) {
+			runes := benchmark.runes
 			b.ReportAllocs()
 			b.ReportMetric(float64(len(runes)), "runes/op")
 			for b.Loop() {

@@ -31,3 +31,17 @@ func TestMakePages(t *testing.T) {
 		}
 	}
 }
+
+func TestPackWidths(t *testing.T) {
+	width := []byte{0, 1, 2, 1, 2, 0, 1, 2}
+	packed := packWidths(width)
+	if got, want := len(packed), 2; got != want {
+		t.Fatalf("len(packed) = %d, want %d", got, want)
+	}
+	for i, want := range width {
+		got := packed[i/4] >> (2 * (i % 4)) & 3
+		if got != want {
+			t.Fatalf("width[%d] = %d, want %d", i, got, want)
+		}
+	}
+}
